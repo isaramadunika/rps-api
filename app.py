@@ -10,7 +10,7 @@ import mediapipe as mp
 import numpy as np
 import streamlit as st
 import torch
-from PIL import Image, UnidentifiedImageError
+from PIL import Image, UnidentifiedImageError, ImageOps
 from streamlit_webrtc import webrtc_streamer
 from torchvision import models, transforms
 
@@ -32,7 +32,7 @@ def crop_hand(image: Image.Image) -> Image.Image | None:
             base_options=BaseOptions(model_asset_path=str(HAND_MODEL_PATH)),
             running_mode=VisionRunningMode.IMAGE,
             num_hands=1,
-            min_hand_detection_confidence=0.5
+            min_hand_detection_confidence=0.2
         )
         with HandLandmarker.create_from_options(options) as landmarker:
             image_np = np.array(image.convert("RGB"))
@@ -211,6 +211,7 @@ else:
 if uploaded_file is not None:
     try:
         image = Image.open(io.BytesIO(uploaded_file.getvalue())).convert("RGB")
+        image = ImageOps.exif_transpose(image)
         if input_method == "Upload Image":
             st.image(image, caption="Original Image", use_container_width=True)
     except (UnidentifiedImageError, OSError, ValueError):
