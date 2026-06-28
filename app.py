@@ -74,7 +74,8 @@ def crop_hand(image: Image.Image) -> Image.Image | None:
             return Image.fromarray(cropped_image_np)
             
     except Exception as e:
-        print(f"MediaPipe error: {e}")
+        import streamlit as st
+        st.error(f"MediaPipe exception in crop_hand: {e}")
         return None
 
 
