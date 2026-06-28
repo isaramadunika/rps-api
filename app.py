@@ -214,12 +214,12 @@ if uploaded_file is not None:
         image = Image.open(io.BytesIO(uploaded_file.getvalue())).convert("RGB")
         image = ImageOps.exif_transpose(image)
         if input_method == "Upload Image":
-            st.image(image, caption="Original Image", use_container_width=True)
+            st.image(image, caption="Original Image", width="stretch")
     except (UnidentifiedImageError, OSError, ValueError):
         st.error("The uploaded file could not be opened. Please choose a valid JPG, JPEG, or PNG image.")
         st.stop()
     
-    if st.button("Predict", use_container_width=True):
+    if st.button("Predict", width="stretch"):
         try:
             with st.spinner("Analyzing image..."):
                 cropped_img = crop_hand(image)
